@@ -2,7 +2,7 @@
     var logger = {
         logServerId: "default",
         //logServerIp: "18.183.210.22",
-        logServerIp: "3twjzg79q4.execute-api.ap-northeast-1.amazonaws.com",
+        // logServerIp: "3twjzg79q4.execute-api.ap-northeast-1.amazonaws.com",
         //logServerPort: "6690",
         logServerPort: "",
         clientType: "browser"
@@ -16,19 +16,19 @@
     console.log = function (text) {
         var logLevel = "INFO";
         console.print(`${logLevel}:${text}`);
-        makeRequest('POST', `https://${logger.logServerIp}:${logger.logServerPort}/log?clientName=${logger.logServerId}&clientType=${logger.clientType}&logMessage=${text}&logLevel=${logLevel}`);
+        // makeRequest('POST', `https://${logger.logServerIp}:${logger.logServerPort}/log?clientName=${logger.logServerId}&clientType=${logger.clientType}&logMessage=${text}&logLevel=${logLevel}`);
     }
 
     console.debug = function (text) {
         var logLevel = "DEBUG";
         console.print(`${logLevel}:${text}`);
-        makeRequest('POST', `https://${logger.logServerIp}:${logger.logServerPort}/log?clientName=${logger.logServerId}&clientType=${logger.clientType}&logMessage=${text}&logLevel=${logLevel}`);
+        // makeRequest('POST', `https://${logger.logServerIp}:${logger.logServerPort}/log?clientName=${logger.logServerId}&clientType=${logger.clientType}&logMessage=${text}&logLevel=${logLevel}`);
     }
 
     console.error = function (text) {
         var logLevel = "ERROR";
         console.print(`${logLevel}:${text}`);
-        makeRequest('POST', `https://${logger.logServerIp}:${logger.logServerPort}/log?clientName=${logger.logServerId}&clientType=${logger.clientType}&logMessage=${text}&logLevel=${logLevel}`);
+        // makeRequest('POST', `https://${logger.logServerIp}:${logger.logServerPort}/log?clientName=${logger.logServerId}&clientType=${logger.clientType}&logMessage=${text}&logLevel=${logLevel}`);
     }
     function resendFailedLogRequests(){
         let filedLog = null;
