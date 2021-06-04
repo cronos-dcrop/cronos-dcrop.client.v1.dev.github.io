@@ -45,63 +45,63 @@ dcropController.restartStream = function (dcropid) {
     if (!record){
         recordedChunks = [];
 
-        const mediaStreamConstraints = {
-            video: true
-        };
+        // const mediaStreamConstraints = {
+        //     video: true
+        // };
           
-        const localVideo = document.querySelector("#remote-video");
+        // const localVideo = document.querySelector("#remote-video");
           
-        function gotLocalMediaStream(mediaStream) {
-            const localStream = mediaStream;
-            var options = { mimeType: "video/webm; codecs=vp9" };
-            mediaRecorder = new MediaRecorder(localStream, options);
+        // function gotLocalMediaStream(mediaStream) {
+        //     const localStream = mediaStream;
+        //     var options = { mimeType: "video/webm; codecs=vp9" };
+        //     mediaRecorder = new MediaRecorder(localStream, options);
             
-            mediaRecorder.ondataavailable = handleDataAvailable;
-            mediaRecorder.start(1000);
+        //     mediaRecorder.ondataavailable = handleDataAvailable;
+        //     mediaRecorder.start(1000);
             
-            function handleDataAvailable(event) {
-                console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
-                if (event.data && event.data.size > 0) {
-                    recordedChunks.push(event.data);
-                    // console.log(recordedChunks);
-                    // download();
-                } else {
-                    // ...
-                }
-            }
-        }
-          
-        function handleLocalMediaStreamError(error) {
-          console.log("navigator.getUserMedia error: ", error);
-        }
-
-        navigator.mediaDevices
-          .getDisplayMedia(mediaStreamConstraints)
-          .then(gotLocalMediaStream)
-          .catch(handleLocalMediaStreamError);
-            
-        // var canvas = document.querySelector('#remote-video');
-
-        // // Optional frames per second argument.
-        // var stream = canvas.captureStream();
-        
-        // console.log(stream);
-        // var options = { mimeType: "video/webm; codecs=vp9" };
-        // mediaRecorder = new MediaRecorder(stream, options);
-        
-        // mediaRecorder.ondataavailable = handleDataAvailable;
-        // mediaRecorder.start(1000);
-        
-        // function handleDataAvailable(event) {
-        //   console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
-        //   if (event.data && event.data.size > 0) {
-        //     recordedChunks.push(event.data);
-        //     // console.log(recordedChunks);
-        //     // download();
-        //   } else {
-        //     // ...
-        //   }
+        //     function handleDataAvailable(event) {
+        //         console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
+        //         if (event.data && event.data.size > 0) {
+        //             recordedChunks.push(event.data);
+        //             // console.log(recordedChunks);
+        //             // download();
+        //         } else {
+        //             // ...
+        //         }
+        //     }
         // }
+          
+        // function handleLocalMediaStreamError(error) {
+        //   console.log("navigator.getUserMedia error: ", error);
+        // }
+
+        // navigator.mediaDevices
+        //   .getDisplayMedia(mediaStreamConstraints)
+        //   .then(gotLocalMediaStream)
+        //   .catch(handleLocalMediaStreamError);
+            
+        var video = document.querySelector('#remote-video');
+
+        // Optional frames per second argument.
+        var stream = video.captureStream(0);
+        
+        console.log(stream);
+        var options = { mimeType: "video/webm; codecs=vp9" };
+        mediaRecorder = new MediaRecorder(stream, options);
+        
+        mediaRecorder.ondataavailable = handleDataAvailable;
+        mediaRecorder.start(1000);
+        
+        function handleDataAvailable(event) {
+          console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
+          if (event.data && event.data.size > 0) {
+            recordedChunks.push(event.data);
+            // console.log(recordedChunks);
+            // download();
+          } else {
+            // ...
+          }
+        }
 
         record = true;
     }
