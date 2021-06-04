@@ -42,24 +42,25 @@ dcropController.restartStream = function (dcropid) {
     // console.log(`リスタートストリームします。機械制御サーバーIP：${dcropController.controlUrl} ターゲット：${dcropid}`);
     // dcropController.makeRequest('POST', cmd, {});
 
+    recordedChunks = [];
     if (!record){
-        var canvas = document.querySelector('#remote-video');
+        var canvas = document.getElementById('remote-video');
 
         // Optional frames per second argument.
         var stream = canvas.captureStream(30);
         
         console.log(stream);
         var options = { mimeType: "video/webm; codecs=vp9" };
-        mediaRecorder = new MediaRecorder(stream, options);
+        mediaRecorder = new MediaRecorder(new MediaStream(stream.getVideoTracks()), options);
         
         mediaRecorder.ondataavailable = handleDataAvailable;
         mediaRecorder.start(1000);
         
         function handleDataAvailable(event) {
-          console.log("data-available");
+          console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
           if (event.data.size > 0) {
             recordedChunks.push(event.data);
-            console.log(recordedChunks);
+            // console.log(recordedChunks);
             // download();
           } else {
             // ...
