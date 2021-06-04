@@ -102,10 +102,10 @@ const start = async () => {
   }
   isStarted = true;
 
-  var canvas = document.querySelector("video");
+  var canvas = document.getElementById("remote-video");
 
   // Optional frames per second argument.
-  // var stream = canvas.captureStream(25);
+  var stream = canvas.captureStream();
   var recordedChunks = [];
   
   console.log(stream);
@@ -143,7 +143,7 @@ const start = async () => {
   setTimeout(event => {
     console.log("stopping");
     mediaRecorder.stop();
-  }, 9000);
+  }, 15000);
 
 }
 
