@@ -105,7 +105,7 @@ const start = async () => {
   var canvas = document.querySelector("video");
 
   // Optional frames per second argument.
-  var stream = canvas.captureStream(25);
+  // var stream = canvas.captureStream(25);
   var recordedChunks = [];
   
   console.log(stream);
