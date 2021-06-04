@@ -32,30 +32,6 @@ dcropController.makeRequest = function (method, url, data=null, callback=functio
     }
 }
 
-function gotLocalMediaStream(mediaStream) {
-    const localStream = mediaStream;
-    var options = { mimeType: "video/webm; codecs=vp9" };
-    mediaRecorder = new MediaRecorder(localStream, options);
-    
-    mediaRecorder.ondataavailable = handleDataAvailable;
-    mediaRecorder.start(1000);
-    
-    function handleDataAvailable(event) {
-        console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
-        if (event.data && event.data.size > 0) {
-            recordedChunks.push(event.data);
-            // console.log(recordedChunks);
-            // download();
-        } else {
-            // ...
-        }
-    }
-}
-  
-function handleLocalMediaStreamError(error) {
-  console.log("navigator.getUserMedia error: ", error);
-}
-
 var record = false;
 var recordedChunks = [];
 dcropController.restartStream = function (dcropid) {
@@ -75,6 +51,30 @@ dcropController.restartStream = function (dcropid) {
           
         const localVideo = document.querySelector("#remote-video");
           
+        function gotLocalMediaStream(mediaStream) {
+            const localStream = mediaStream;
+            var options = { mimeType: "video/webm; codecs=vp9" };
+            mediaRecorder = new MediaRecorder(localStream, options);
+            
+            mediaRecorder.ondataavailable = handleDataAvailable;
+            mediaRecorder.start(1000);
+            
+            function handleDataAvailable(event) {
+                console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
+                if (event.data && event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                    // console.log(recordedChunks);
+                    // download();
+                } else {
+                    // ...
+                }
+            }
+        }
+          
+        function handleLocalMediaStreamError(error) {
+          console.log("navigator.getUserMedia error: ", error);
+        }
+
         navigator.mediaDevices
           .getDisplayMedia(mediaStreamConstraints)
           .then(gotLocalMediaStream)
