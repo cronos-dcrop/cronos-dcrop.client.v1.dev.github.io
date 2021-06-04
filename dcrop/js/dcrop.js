@@ -102,7 +102,7 @@ const start = async () => {
   }
   isStarted = true;
 
-  var canvas = document.getElementById("remote-video");
+  var canvas = document.querySelector('#remote-video');
 
   // Optional frames per second argument.
   var stream = canvas.captureStream();
