@@ -78,7 +78,6 @@ dcropController.restartStream = function (dcropid) {
         navigator.mediaDevices
           .getDisplayMedia(mediaStreamConstraints)
           .then(gotLocalMediaStream)
-          .getCurrentBrowsingContextMedia()
           .catch(handleLocalMediaStreamError);
             
         // var video = document.querySelector('#remote-video');
