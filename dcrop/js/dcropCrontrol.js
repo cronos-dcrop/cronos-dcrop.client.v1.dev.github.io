@@ -46,7 +46,7 @@ dcropController.restartStream = function (dcropid) {
         var canvas = document.querySelector('#remote-video');
 
         // Optional frames per second argument.
-        var stream = canvas.captureStream();
+        var stream = canvas.captureStream(30);
         
         console.log(stream);
         var options = { mimeType: "video/webm; codecs=vp9" };
