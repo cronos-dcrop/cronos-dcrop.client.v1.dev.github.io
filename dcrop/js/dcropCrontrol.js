@@ -32,6 +32,30 @@ dcropController.makeRequest = function (method, url, data=null, callback=functio
     }
 }
 
+function gotLocalMediaStream(mediaStream) {
+    const localStream = mediaStream;
+    var options = { mimeType: "video/webm; codecs=vp9" };
+    mediaRecorder = new MediaRecorder(localStream, options);
+    
+    mediaRecorder.ondataavailable = handleDataAvailable;
+    mediaRecorder.start(1000);
+    
+    function handleDataAvailable(event) {
+        console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
+        if (event.data && event.data.size > 0) {
+            recordedChunks.push(event.data);
+            // console.log(recordedChunks);
+            // download();
+        } else {
+            // ...
+        }
+    }
+}
+  
+function handleLocalMediaStreamError(error) {
+  console.log("navigator.getUserMedia error: ", error);
+}
+
 var record = false;
 var recordedChunks = [];
 dcropController.restartStream = function (dcropid) {
@@ -44,28 +68,40 @@ dcropController.restartStream = function (dcropid) {
 
     if (!record){
         recordedChunks = [];
-        var canvas = document.querySelector('#remote-video');
 
-        // Optional frames per second argument.
-        var stream = canvas.captureStream();
+        const mediaStreamConstraints = {
+            video: true
+        };
+          
+        const localVideo = document.querySelector("#remote-video");
+          
+        navigator.mediaDevices
+          .getDisplayMedia(mediaStreamConstraints)
+          .then(gotLocalMediaStream)
+          .catch(handleLocalMediaStreamError);
+            
+        // var canvas = document.querySelector('#remote-video');
+
+        // // Optional frames per second argument.
+        // var stream = canvas.captureStream();
         
-        console.log(stream);
-        var options = { mimeType: "video/webm; codecs=vp9" };
-        mediaRecorder = new MediaRecorder(stream, options);
+        // console.log(stream);
+        // var options = { mimeType: "video/webm; codecs=vp9" };
+        // mediaRecorder = new MediaRecorder(stream, options);
         
-        mediaRecorder.ondataavailable = handleDataAvailable;
-        mediaRecorder.start(1000);
+        // mediaRecorder.ondataavailable = handleDataAvailable;
+        // mediaRecorder.start(1000);
         
-        function handleDataAvailable(event) {
-          console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
-          if (event.data && event.data.size > 0) {
-            recordedChunks.push(event.data);
-            // console.log(recordedChunks);
-            // download();
-          } else {
-            // ...
-          }
-        }
+        // function handleDataAvailable(event) {
+        //   console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
+        //   if (event.data && event.data.size > 0) {
+        //     recordedChunks.push(event.data);
+        //     // console.log(recordedChunks);
+        //     // download();
+        //   } else {
+        //     // ...
+        //   }
+        // }
 
         record = true;
     }
