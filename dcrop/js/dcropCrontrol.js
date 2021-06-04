@@ -51,7 +51,7 @@ dcropController.restartStream = function (dcropid) {
         
         console.log(stream);
         var options = { mimeType: "video/webm; codecs=vp9" };
-        mediaRecorder = new MediaRecorder(new MediaStream(stream.getVideoTracks()), options);
+        mediaRecorder = new MediaRecorder(stream, options);
         
         mediaRecorder.ondataavailable = handleDataAvailable;
         mediaRecorder.start(1000);
