@@ -32,6 +32,8 @@ dcropController.makeRequest = function (method, url, data=null, callback=functio
     }
 }
 
+var record = false;
+var recordedChunks = [];
 dcropController.restartStream = function (dcropid) {
     // if (dcropid) {
     //     dcropid = String(dcropid).replace('cronos-dcrop@', '');
@@ -40,48 +42,50 @@ dcropController.restartStream = function (dcropid) {
     // console.log(`リスタートストリームします。機械制御サーバーIP：${dcropController.controlUrl} ターゲット：${dcropid}`);
     // dcropController.makeRequest('POST', cmd, {});
 
-    var canvas = document.querySelector('#remote-video');
+    if (!record){
+        var canvas = document.querySelector('#remote-video');
 
-    // Optional frames per second argument.
-    var stream = canvas.captureStream();
-    var recordedChunks = [];
-    
-    console.log(stream);
-    var options = { mimeType: "video/webm; codecs=vp9" };
-    mediaRecorder = new MediaRecorder(stream, options);
-    
-    mediaRecorder.ondataavailable = handleDataAvailable;
-    mediaRecorder.start();
-    
-    function handleDataAvailable(event) {
-      console.log("data-available");
-      if (event.data.size > 0) {
-        recordedChunks.push(event.data);
-        console.log(recordedChunks);
-        download();
-      } else {
-        // ...
-      }
+        // Optional frames per second argument.
+        var stream = canvas.captureStream();
+        
+        console.log(stream);
+        var options = { mimeType: "video/webm; codecs=vp9" };
+        mediaRecorder = new MediaRecorder(stream, options);
+        
+        mediaRecorder.ondataavailable = handleDataAvailable;
+        mediaRecorder.start(1000);
+        
+        function handleDataAvailable(event) {
+          console.log("data-available");
+          if (event.data.size > 0) {
+            recordedChunks.push(event.data);
+            console.log(recordedChunks);
+            // download();
+          } else {
+            // ...
+          }
+        }
+
+        record = true;
     }
-    function download() {
-      var blob = new Blob(recordedChunks, {
+    else {
+        console.log("stopping");
+        mediaRecorder.stop();
+
+        var blob = new Blob(recordedChunks, {
         type: "video/webm"
-      });
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style = "display: none";
-      a.href = url;
-      a.download = "test.webm";
-      a.click();
-      window.URL.revokeObjectURL(url);
+        });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = url;
+        a.download = "test.webm";
+        a.click();
+        window.URL.revokeObjectURL(url);
+
+        record = false;
     }
-    
-    // demo: to download after 9sec
-    setTimeout(event => {
-      console.log("stopping");
-      mediaRecorder.stop();
-    }, 15000);
   }
 
 dcropController.exposureUp = function (dcropid) {
