@@ -30,44 +30,45 @@ const startConn = async () => {
   options.video.codec = videoCodec;
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
-  let pc_config = {"iceServers":[
-    {"urls": "stun:stun.l.google.com:19302"}
-    // {"urls": "stun:stun1.l.google.com:19302"},
-    // {"urls": "stun:stun2.l.google.com:19302"}
-  ]};
-  let peer = new RTCPeerConnection(pc_config);
+  // let pc_config = {"iceServers":[
+  //   {"urls": "stun:stun.l.google.com:19302"}
+  //   // {"urls": "stun:stun1.l.google.com:19302"},
+  //   // {"urls": "stun:stun2.l.google.com:19302"}
+  // ]};
+  // let peer = new RTCPeerConnection(pc_config);
 
-  // if (checkAyameOnline) {
-  //   conn = Ayame.connection(signalingUrl, roomId, options, true);
-  // }
-  // else {
-  //   conn = Ayame.connection('stun.l.google.com', roomId, options, true);
-  // }
-  // console.log("fromIframe >> RoomId = " + roomId);
-  // conn.on('connect', (e) => {
-  //   connected = true;
-  //   var restartStreamButton = document.getElementById("restartStreamButton");
-  //   restartStreamButton.style.visibility = "hidden";
-  //   console.log("connect");
-  // });
-  // conn.on('open', async (e) => {
-  //   //接続後に明るさ・露出・コントラストの数字を取得して表示させます
-  //   dcropController.getExposure(roomId);
-  //   dcropController.getBrightness(roomId);
-  //   dcropController.getContrast(roomId);
-  // });
-  // conn.on('disconnect', (e) => {
-  //   console.log(e);
-  //   remoteVideo.srcObject = null;
-  //   window.location.reload(1);
-  // });
+  if (checkAyameOnline) {
+    conn = Ayame.connection(signalingUrlCronos, roomId, options, true);
+    // conn = Ayame.connection(signalingUrl, roomId, options, true);
+  }
+  else {
+    conn = Ayame.connection(signalingUrlCronos, roomId, options, true);
+  }
+  console.log("fromIframe >> RoomId = " + roomId);
+  conn.on('connect', (e) => {
+    connected = true;
+    var restartStreamButton = document.getElementById("restartStreamButton");
+    restartStreamButton.style.visibility = "hidden";
+    console.log("connect");
+  });
+  conn.on('open', async (e) => {
+    //接続後に明るさ・露出・コントラストの数字を取得して表示させます
+    dcropController.getExposure(roomId);
+    dcropController.getBrightness(roomId);
+    dcropController.getContrast(roomId);
+  });
+  conn.on('disconnect', (e) => {
+    console.log(e);
+    remoteVideo.srcObject = null;
+    window.location.reload(1);
+  });
 
-  // conn.on('addstream', (e) => {
-  //   createVideoIfNotExistent();
-  //   remoteVideo.srcObject = e.stream;
-  // });
+  conn.on('addstream', (e) => {
+    createVideoIfNotExistent();
+    remoteVideo.srcObject = e.stream;
+  });
 
-  // conn.connect(null);
+  conn.connect(null);
 };
 document.querySelector("#roomIdInput").value = roomId;
 let lblCameraName = document.getElementById("cameraName");

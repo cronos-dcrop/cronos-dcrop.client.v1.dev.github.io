@@ -1,4 +1,5 @@
 const signalingUrl = 'wss://ayame-labo.shiguredo.jp/signaling';
+const signalingUrlCronos = 'wss://54.250.117.97/signaling';
 let roomId = 'ayame-web-sdk-sample';
 let clientId = null;
 let videoCodec = "H264";
