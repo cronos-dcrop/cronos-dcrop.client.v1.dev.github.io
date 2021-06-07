@@ -17,12 +17,26 @@ const disconnect = () => {
   }
   console.log("ページ再読込");
 }
+const checkAyameOnline = async () => {
+  try {
+    await fetch(signalingUrl, {mode: 'no-cors'});
+  } catch {
+    return false;
+  }
+  return true;
+};
 const startConn = async () => {
   await sleep(500);
   options.video.codec = videoCodec;
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
-  conn = Ayame.connection(signalingUrl, roomId, options, true);
+  conn = Ayame.connection('stun.l.google.com', roomId, options, true);
+  // if (checkAyameOnline) {
+  //   conn = Ayame.connection(signalingUrl, roomId, options, true);
+  // }
+  // else {
+  //   conn = Ayame.connection('stun.l.google.com', roomId, options, true);
+  // }
   console.log("fromIframe >> RoomId = " + roomId);
   conn.on('connect', (e) => {
     connected = true;
