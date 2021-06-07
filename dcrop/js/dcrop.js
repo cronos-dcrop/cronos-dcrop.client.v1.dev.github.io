@@ -30,7 +30,7 @@ const startConn = async () => {
   options.video.codec = videoCodec;
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
-  conn = Ayame.connection('wss://stun.l.google.com', roomId, options, true);
+  conn = Ayame.connection('stun:stun.l.google.com:19302', roomId, options, true);
   // if (checkAyameOnline) {
   //   conn = Ayame.connection(signalingUrl, roomId, options, true);
   // }
