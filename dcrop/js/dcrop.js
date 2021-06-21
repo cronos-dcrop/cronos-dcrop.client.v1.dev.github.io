@@ -1,3 +1,5 @@
+import cronosAyame from "cronosAyame"
+
 let isControlActive = false;
 let connected = false;
 let isStarted = false;
