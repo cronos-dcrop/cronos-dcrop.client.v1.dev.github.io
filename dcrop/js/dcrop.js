@@ -1,4 +1,4 @@
-import cronosAyame from "./cronosAyame/cronosAyame.js"
+import { cronosAyame } from "./cronosAyame/cronosAyame.js";
 
 let isControlActive = false;
 let connected = false;
