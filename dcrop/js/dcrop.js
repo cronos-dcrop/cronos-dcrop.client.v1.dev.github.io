@@ -3,12 +3,17 @@ let connected = false;
 let isStarted = false;
 
 const options = Ayame.defaultOptions;
+const cronosOptions = cronosAyame.defaultOptions;
 options.clientId = clientId ? clientId : options.clientId;
+cronosOptions.clientId = clientId ? clientId : cronosOptions.clientId;
 if (signalingKey) {
   options.signalingKey = signalingKey;
+  cronosOptions.signalingKey = signalingKey;
 }
 options.video.direction = 'recvonly';
 options.audio.direction = 'recvonly';
+cronosOptions.video.direction = 'recvonly';
+cronosOptions.audio.direction = 'recvonly';
 let remoteVideo = null;
 let conn;
 const disconnect = () => {
@@ -28,21 +33,16 @@ const checkAyameOnline = async () => {
 const startConn = async () => {
   await sleep(500);
   options.video.codec = videoCodec;
+  cronosOptions.video.codec = videoCodec;
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
-  // let pc_config = {"iceServers":[
-  //   {"urls": "stun:stun.l.google.com:19302"}
-  //   // {"urls": "stun:stun1.l.google.com:19302"},
-  //   // {"urls": "stun:stun2.l.google.com:19302"}
-  // ]};
-  // let peer = new RTCPeerConnection(pc_config);
 
   if (checkAyameOnline) {
-    conn = Ayame.connection(signalingUrlCronos, roomId, options, true);
+    conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
     // conn = Ayame.connection(signalingUrl, roomId, options, true);
   }
   else {
-    conn = Ayame.connection(signalingUrlCronos, roomId, options, true);
+    conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
   }
   console.log("fromIframe >> RoomId = " + roomId);
   conn.on('connect', (e) => {
