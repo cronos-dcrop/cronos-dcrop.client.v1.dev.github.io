@@ -38,11 +38,12 @@ const startConn = async () => {
   await sleep(500);
 
   if (checkAyameOnline) {
-    conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-    // conn = Ayame.connection(signalingUrl, roomId, options, true);
+    // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+    conn = Ayame.connection(signalingUrl, roomId, options, true);
   }
   else {
-    conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+    // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+    conn = Ayame.connection(signalingUrl, roomId, options, true);
   }
   console.log("fromIframe >> RoomId = " + roomId);
   conn.on('connect', (e) => {
