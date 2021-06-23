@@ -771,7 +771,7 @@
           //{ urls: 'stun:stun.l.google.com:19302' },
           // 21.06.18 Y.Imanishi Cronos STUN/TURN Server
           // [TODO]external_ipの部分をTURNサーバーのIPアドレスに書きかえる
-          { urls: 'turn:35.74.207.249:3478?transport=tcp', credential: 'Cronos1188', username: 'dcrop' }
+          { urls: 'turn:cronos-ayame.mydns.jp:3478?transport=tcp', credential: 'Cronos1188', username: 'dcrop' }
       ],
       clientId: randomString(17)
   };
