@@ -768,7 +768,10 @@
       audio: { direction: 'sendrecv', enabled: true },
       video: { direction: 'sendrecv', enabled: true },
       iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
+          // { urls: 'stun:stun.l.google.com:19302' },
+          // 21.06.18 Y.Imanishi Cronos STUN/TURN Server
+          // [TODO]external_ipの部分をTURNサーバーのIPアドレスに書きかえる
+          { urls: 'turn:cronos-ayame.mydns.jp:3478?transport=tcp', credential: 'Cronos1188', username: 'dcrop' }
       ],
       clientId: randomString(17)
   };
