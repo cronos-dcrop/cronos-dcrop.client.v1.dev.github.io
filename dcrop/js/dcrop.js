@@ -38,8 +38,8 @@ const startConn = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  wsAyame = new WebSocket(signalingUrl);
-  wsCronos = new WebSocket(signalingUrlCronos);
+  wsAyame = Ayame.connection(signalingUrl, roomId, options, true);
+  wsCronos = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
   console.log(wsAyame);
   console.log(wsCronos);
 
