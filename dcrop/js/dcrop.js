@@ -54,6 +54,7 @@ const startConn_Ayame = async () => {
   });
 
   conn.connect(null);
+  await sleep(1000);
 };
 const startConn_cronosAyame = async () => {
   await sleep(500);
@@ -88,6 +89,7 @@ const startConn_cronosAyame = async () => {
   });
 
   conn.connect(null);
+  await sleep(1000);
 };
 document.querySelector("#roomIdInput").value = roomId;
 let lblCameraName = document.getElementById("cameraName");
@@ -127,7 +129,6 @@ for (var i = 0; i < controls.length; i++) {
 
 window.onload = function () {
   startConn_cronosAyame();
-  await sleep(1000);
   if (!connected) {
     startConn_Ayame();
   }
