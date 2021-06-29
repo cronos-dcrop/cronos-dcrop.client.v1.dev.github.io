@@ -22,7 +22,40 @@ const disconnect = () => {
   }
   console.log("ページ再読込");
 }
-const startConn = async () => {
+const startConn_Ayame = async () => {
+  await sleep(500);
+  options.video.codec = videoCodec;
+  cronosOptions.video.codec = videoCodec;
+  console.log(`desired videoCodec:${videoCodec}`);
+  await sleep(500);
+
+  conn = Ayame.connection(signalingUrl, roomId, options, true);
+  conn.on('connect', (e) => {
+    connected = true;
+    var restartStreamButton = document.getElementById("restartStreamButton");
+    restartStreamButton.style.visibility = "hidden";
+    console.log("connect Ayame-Labo");
+  });  
+  conn.on('open', async (e) => {
+    //接続後に明るさ・露出・コントラストの数字を取得して表示させます
+    dcropController.getExposure(roomId);
+    dcropController.getBrightness(roomId);
+    dcropController.getContrast(roomId);
+  });
+  conn.on('disconnect', (e) => {
+    console.log(e);
+    remoteVideo.srcObject = null;
+    window.location.reload(1);
+  });
+
+  conn.on('addstream', (e) => {
+    createVideoIfNotExistent();
+    remoteVideo.srcObject = e.stream;
+  });
+
+  conn.connect(null);
+};
+const startConn_cronosAyame = async () => {
   await sleep(500);
   options.video.codec = videoCodec;
   cronosOptions.video.codec = videoCodec;
@@ -36,20 +69,7 @@ const startConn = async () => {
     var restartStreamButton = document.getElementById("restartStreamButton");
     restartStreamButton.style.visibility = "hidden";
     console.log("connect Cronos-Ayame");
-    // console.log("connect Ayame-Labo");
   });
-  await sleep(1000);
-  if (!connected) {
-    // Ayame-LaboがダメならCronos-Ayameに接続する
-    conn = Ayame.connection(signalingUrl, roomId, options, true);
-    conn.on('connect', (e) => {
-      connected = true;
-      var restartStreamButton = document.getElementById("restartStreamButton");
-      restartStreamButton.style.visibility = "hidden";
-      console.log("connect Ayame-Labo");
-      // console.log("connect Cronos-Ayame");
-    });  
-  }
   conn.on('open', async (e) => {
     //接続後に明るさ・露出・コントラストの数字を取得して表示させます
     dcropController.getExposure(roomId);
@@ -106,7 +126,11 @@ for (var i = 0; i < controls.length; i++) {
 }
 
 window.onload = function () {
-  startConn();
+  startConn_cronosAyame();
+  await sleep(1000);
+  if (!connected) {
+    startConn_Ayame();
+  }
   //checkAndReconnect();
   //consoleLog();
   start();
