@@ -27,9 +27,11 @@ const checkAyameOnline = async () => {
     await fetch(signalingUrlCronos, {mode: 'no-cors'});
     // await fetch(signalingUrl, {mode: 'no-cors'});
   } catch {
-    return false;
+    conn = Ayame.connection(signalingUrl, roomId, options, true);
+    // return false;
   }
-  return true;
+  conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+  // return true;
 };
 const startConn = async () => {
   await sleep(500);
@@ -38,16 +40,17 @@ const startConn = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  checkAyameOnline().then(result => {
-    if (result) {
-      conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-      // conn = Ayame.connection(signalingUrl, roomId, options, true);
-    }
-    else {
-      // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-      conn = Ayame.connection(signalingUrl, roomId, options, true);
-    }
-  });
+  checkAyameOnline();
+  // checkAyameOnline().then(result => {
+  //   if (result) {
+  //     conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+  //     // conn = Ayame.connection(signalingUrl, roomId, options, true);
+  //   }
+  //   else {
+  //     // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+  //     conn = Ayame.connection(signalingUrl, roomId, options, true);
+  //   }
+  // });
   console.log("fromIframe >> RoomId = " + roomId);
   conn.on('connect', (e) => {
     connected = true;
