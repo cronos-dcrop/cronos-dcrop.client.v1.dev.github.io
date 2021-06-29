@@ -22,18 +22,6 @@ const disconnect = () => {
   }
   console.log("ページ再読込");
 }
-// const checkAyameOnline = async() => {
-//   try {
-//     ws = new WebSocket(signalingUrl);
-//     if ( ws && ws.readyState === 1 ) {
-//       return true;
-//     }
-//     // await fetch(signalingUrl, {mode: 'no-cors'});
-//   } catch {
-//     return false;
-//   }
-//   return false;
-// };
 const startConn = async () => {
   await sleep(500);
   options.video.codec = videoCodec;
@@ -42,17 +30,6 @@ const startConn = async () => {
   await sleep(500);
 
   conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-  // conn = checkAyameOnline().then(result => {
-  //   if (result) {
-  //     conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-  //     // conn = Ayame.connection(signalingUrl, roomId, options, true);
-  //   }
-  //   else {
-  //     // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-  //     conn = Ayame.connection(signalingUrl, roomId, options, true);
-  //   }
-  //   return conn;
-  // });
   console.log("fromIframe >> RoomId = " + roomId);
   conn.on('connect', (e) => {
     connected = true;

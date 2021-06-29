@@ -35,94 +35,94 @@ dcropController.makeRequest = function (method, url, data=null, callback=functio
 var record = false;
 var recordedChunks = [];
 dcropController.restartStream = function (dcropid) {
-    // if (dcropid) {
-    //     dcropid = String(dcropid).replace('cronos-dcrop@', '');
+    if (dcropid) {
+        dcropid = String(dcropid).replace('cronos-dcrop@', '');
+    }
+    var cmd = `${dcropController.controlUrl}command=restartStream&dcropid=${dcropid}`;
+    console.log(`リスタートストリームします。機械制御サーバーIP：${dcropController.controlUrl} ターゲット：${dcropid}`);
+    dcropController.makeRequest('POST', cmd, {});
+
+    // if (!record){
+    //     recordedChunks = [];
+
+    //     const mediaStreamConstraints = {
+    //         video: true
+    //     };
+          
+    //     const localVideo = document.querySelector("#remote-video");
+          
+    //     function gotLocalMediaStream(mediaStream) {
+    //         const localStream = mediaStream;
+    //         var options = { mimeType: "video/webm; codecs=vp9" };
+    //         mediaRecorder = new MediaRecorder(localStream, options);
+            
+    //         mediaRecorder.ondataavailable = handleDataAvailable;
+    //         mediaRecorder.start(1000);
+            
+    //         function handleDataAvailable(event) {
+    //             console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
+    //             if (event.data && event.data.size > 0) {
+    //                 recordedChunks.push(event.data);
+    //                 // console.log(recordedChunks);
+    //                 // download();
+    //             } else {
+    //                 // ...
+    //             }
+    //         }
+    //     }
+          
+    //     function handleLocalMediaStreamError(error) {
+    //       console.log("navigator.getUserMedia error: ", error);
+    //     }
+
+    //     navigator.mediaDevices
+    //       .getDisplayMedia(mediaStreamConstraints)
+    //       .then(gotLocalMediaStream)
+    //       .catch(handleLocalMediaStreamError);
+            
+    //     // var video = document.querySelector('#remote-video');
+
+    //     // // Optional frames per second argument.
+    //     // var stream = video.captureStream(0);
+        
+    //     // console.log(stream);
+    //     // var options = { mimeType: "video/webm; codecs=vp9" };
+    //     // mediaRecorder = new MediaRecorder(stream, options);
+        
+    //     // mediaRecorder.ondataavailable = handleDataAvailable;
+    //     // mediaRecorder.start(1000);
+        
+    //     // function handleDataAvailable(event) {
+    //     //   console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
+    //     //   if (event.data && event.data.size > 0) {
+    //     //     recordedChunks.push(event.data);
+    //     //     // console.log(recordedChunks);
+    //     //     // download();
+    //     //   } else {
+    //     //     // ...
+    //     //   }
+    //     // }
+
+    //     record = true;
     // }
-    // var cmd = `${dcropController.controlUrl}command=restartStream&dcropid=${dcropid}`;
-    // console.log(`リスタートストリームします。機械制御サーバーIP：${dcropController.controlUrl} ターゲット：${dcropid}`);
-    // dcropController.makeRequest('POST', cmd, {});
+    // else {
+    //     console.log("stopping");
+    //     mediaRecorder.stop();
 
-    if (!record){
-        recordedChunks = [];
+    //     var blob = new Blob(recordedChunks, {
+    //     type: "video/webm"
+    //     });
+    //     var url = URL.createObjectURL(blob);
+    //     var a = document.createElement("a");
+    //     document.body.appendChild(a);
+    //     a.style = "display: none";
+    //     a.href = url;
+    //     a.download = "test.webm";
+    //     a.click();
+    //     window.URL.revokeObjectURL(url);
 
-        const mediaStreamConstraints = {
-            video: true
-        };
-          
-        const localVideo = document.querySelector("#remote-video");
-          
-        function gotLocalMediaStream(mediaStream) {
-            const localStream = mediaStream;
-            var options = { mimeType: "video/webm; codecs=vp9" };
-            mediaRecorder = new MediaRecorder(localStream, options);
-            
-            mediaRecorder.ondataavailable = handleDataAvailable;
-            mediaRecorder.start(1000);
-            
-            function handleDataAvailable(event) {
-                console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
-                if (event.data && event.data.size > 0) {
-                    recordedChunks.push(event.data);
-                    // console.log(recordedChunks);
-                    // download();
-                } else {
-                    // ...
-                }
-            }
-        }
-          
-        function handleLocalMediaStreamError(error) {
-          console.log("navigator.getUserMedia error: ", error);
-        }
-
-        navigator.mediaDevices
-          .getDisplayMedia(mediaStreamConstraints)
-          .then(gotLocalMediaStream)
-          .catch(handleLocalMediaStreamError);
-            
-        // var video = document.querySelector('#remote-video');
-
-        // // Optional frames per second argument.
-        // var stream = video.captureStream(0);
-        
-        // console.log(stream);
-        // var options = { mimeType: "video/webm; codecs=vp9" };
-        // mediaRecorder = new MediaRecorder(stream, options);
-        
-        // mediaRecorder.ondataavailable = handleDataAvailable;
-        // mediaRecorder.start(1000);
-        
-        // function handleDataAvailable(event) {
-        //   console.log("data available: event.data.type=" + event.data.type + " size=" + event.data.size);
-        //   if (event.data && event.data.size > 0) {
-        //     recordedChunks.push(event.data);
-        //     // console.log(recordedChunks);
-        //     // download();
-        //   } else {
-        //     // ...
-        //   }
-        // }
-
-        record = true;
-    }
-    else {
-        console.log("stopping");
-        mediaRecorder.stop();
-
-        var blob = new Blob(recordedChunks, {
-        type: "video/webm"
-        });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        document.body.appendChild(a);
-        a.style = "display: none";
-        a.href = url;
-        a.download = "test.webm";
-        a.click();
-        window.URL.revokeObjectURL(url);
-
-        record = false;
-    }
+    //     record = false;
+    // }
 }
 
 dcropController.exposureUp = function (dcropid) {
