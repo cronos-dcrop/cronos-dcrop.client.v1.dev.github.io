@@ -17,9 +17,15 @@ cronosOptions.audio.direction = 'recvonly';
 let remoteVideo = null;
 let connAyame;
 let connCronos;
-const disconnect = () => {
-  if (conn) {
-    conn.disconnect();
+const disconnect_Ayame = () => {
+  if (connAyame) {
+    connAyame.disconnect();
+  }
+  console.log("ページ再読込");
+}
+const disconnect_Cronos = () => {
+  if (connCronos) {
+    connCronos.disconnect();
   }
   console.log("ページ再読込");
 }
@@ -132,7 +138,7 @@ window.onload = function () {
   startConn_cronosAyame();
   if (!connected) {
     connected = false;
-    connCronos.disconnect();
+    disconnect_Cronos();
     startConn_Ayame();
   }
   //checkAndReconnect();
