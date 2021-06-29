@@ -40,7 +40,7 @@ const startConn = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  if (checkAyameOnline) {
+  if (checkAyameOnline()) {
     conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
     // conn = Ayame.connection(signalingUrl, roomId, options, true);
   }
