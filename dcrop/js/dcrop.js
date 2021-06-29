@@ -15,7 +15,8 @@ options.audio.direction = 'recvonly';
 cronosOptions.video.direction = 'recvonly';
 cronosOptions.audio.direction = 'recvonly';
 let remoteVideo = null;
-let conn;
+let connAyame;
+let connCronos;
 const disconnect = () => {
   if (conn) {
     conn.disconnect();
@@ -29,31 +30,31 @@ const startConn_Ayame = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  conn = Ayame.connection(signalingUrl, roomId, options, true);
-  conn.on('connect', (e) => {
+  connAyame = Ayame.connection(signalingUrl, roomId, options, true);
+  connAyame.on('connect', (e) => {
     connected = true;
     var restartStreamButton = document.getElementById("restartStreamButton");
     restartStreamButton.style.visibility = "hidden";
     console.log("connect Ayame-Labo");
   });  
-  conn.on('open', async (e) => {
+  connAyame.on('open', async (e) => {
     //接続後に明るさ・露出・コントラストの数字を取得して表示させます
     dcropController.getExposure(roomId);
     dcropController.getBrightness(roomId);
     dcropController.getContrast(roomId);
   });
-  conn.on('disconnect', (e) => {
+  connAyame.on('disconnect', (e) => {
     console.log(e);
     remoteVideo.srcObject = null;
     window.location.reload(1);
   });
 
-  conn.on('addstream', (e) => {
+  connAyame.on('addstream', (e) => {
     createVideoIfNotExistent();
     remoteVideo.srcObject = e.stream;
   });
 
-  conn.connect(null);
+  connAyame.connect(null);
   await sleep(1000);
 };
 const startConn_cronosAyame = async () => {
@@ -63,32 +64,32 @@ const startConn_cronosAyame = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+  connCronos = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
   console.log("fromIframe >> RoomId = " + roomId);
-  conn.on('connect', (e) => {
+  connCronos.on('connect', (e) => {
     connected = true;
     var restartStreamButton = document.getElementById("restartStreamButton");
     restartStreamButton.style.visibility = "hidden";
     console.log("connect Cronos-Ayame");
   });
-  conn.on('open', async (e) => {
+  connCronos.on('open', async (e) => {
     //接続後に明るさ・露出・コントラストの数字を取得して表示させます
     dcropController.getExposure(roomId);
     dcropController.getBrightness(roomId);
     dcropController.getContrast(roomId);
   });
-  conn.on('disconnect', (e) => {
+  connCronos.on('disconnect', (e) => {
     console.log(e);
     remoteVideo.srcObject = null;
     window.location.reload(1);
   });
 
-  conn.on('addstream', (e) => {
+  connCronos.on('addstream', (e) => {
     createVideoIfNotExistent();
     remoteVideo.srcObject = e.stream;
   });
 
-  conn.connect(null);
+  connCronos.connect(null);
   await sleep(1000);
 };
 document.querySelector("#roomIdInput").value = roomId;
@@ -130,6 +131,8 @@ for (var i = 0; i < controls.length; i++) {
 window.onload = function () {
   startConn_cronosAyame();
   if (!connected) {
+    connected = false;
+    connCronos.disconnect();
     startConn_Ayame();
   }
   //checkAndReconnect();
