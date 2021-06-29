@@ -27,8 +27,10 @@ const checkAyameOnline = async () => {
     await fetch(signalingUrlCronos, {mode: 'no-cors'});
     // await fetch(signalingUrl, {mode: 'no-cors'});
   } catch {
+    console.log('Down cronosAayme');
     return false;
   }
+  console.log('Up cronosAayme');
   return true;
 };
 const startConn = async () => {
