@@ -30,12 +30,14 @@ const startConn = async () => {
   await sleep(500);
 
   conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+  await sleep(1000);
   console.log("fromIframe >> RoomId = " + roomId);
   conn.on('connect', (e) => {
     connected = true;
     var restartStreamButton = document.getElementById("restartStreamButton");
     restartStreamButton.style.visibility = "hidden";
-    console.log("connect Ayame-Labo");
+    console.log("connect Cronos-Ayame");
+    // console.log("connect Ayame-Labo");
   });
   if (!connected) {
     // Ayame-LaboがダメならCronos-Ayameに接続する
@@ -44,7 +46,8 @@ const startConn = async () => {
       connected = true;
       var restartStreamButton = document.getElementById("restartStreamButton");
       restartStreamButton.style.visibility = "hidden";
-      console.log("connect Cronos-Ayame");
+      console.log("connect Ayame-Labo");
+      // console.log("connect Cronos-Ayame");
     });  
   }
   conn.on('open', async (e) => {
