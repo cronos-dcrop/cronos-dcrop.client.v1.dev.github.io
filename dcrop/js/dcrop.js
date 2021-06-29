@@ -27,10 +27,8 @@ const checkAyameOnline = async () => {
     await fetch(signalingUrlCronos, {mode: 'no-cors'});
     // await fetch(signalingUrl, {mode: 'no-cors'});
   } catch {
-    console.log('Down cronosAayme');
     return false;
   }
-  console.log('Up cronosAayme');
   return true;
 };
 const startConn = async () => {
@@ -40,14 +38,16 @@ const startConn = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  if (checkAyameOnline()) {
-    conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-    // conn = Ayame.connection(signalingUrl, roomId, options, true);
-  }
-  else {
-    // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-    conn = Ayame.connection(signalingUrl, roomId, options, true);
-  }
+  checkAyameOnline().then(result => {
+    if (result) {
+      conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+      // conn = Ayame.connection(signalingUrl, roomId, options, true);
+    }
+    else {
+      // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+      conn = Ayame.connection(signalingUrl, roomId, options, true);
+    }
+  });
   console.log("fromIframe >> RoomId = " + roomId);
   conn.on('connect', (e) => {
     connected = true;
