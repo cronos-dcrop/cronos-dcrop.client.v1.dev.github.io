@@ -21,13 +21,13 @@ const disconnect_Ayame = () => {
   if (connAyame) {
     connAyame.disconnect();
   }
-  console.log("ページ再読込");
+  console.log("ページ再読込(AyameLabo)");
 }
 const disconnect_Cronos = () => {
   if (connCronos) {
     connCronos.disconnect();
   }
-  console.log("ページ再読込");
+  console.log("ページ再読込(CronosAyame)");
 }
 const startConn_Ayame = async () => {
   await sleep(500);
@@ -137,8 +137,6 @@ for (var i = 0; i < controls.length; i++) {
 window.onload = function () {
   startConn_cronosAyame();
   if (!connected) {
-    connected = false;
-    disconnect_Cronos();
     startConn_Ayame();
   }
   //checkAndReconnect();
