@@ -22,14 +22,17 @@ const disconnect = () => {
   }
   console.log("ページ再読込");
 }
-const checkAyameOnline = async () => {
+function checkAyameOnline () {
   try {
-    await fetch(signalingUrlCronos, {mode: 'no-cors'});
+    ws = new WebSocket(signalingUrl);
+    if ( ws && ws.readyState === 1 ) {
+      return true;
+    }
     // await fetch(signalingUrl, {mode: 'no-cors'});
   } catch {
     return false;
   }
-  return true;
+  return false;
 };
 const startConn = async () => {
   await sleep(500);
@@ -38,22 +41,25 @@ const startConn = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  wsAyame = Ayame.connection(signalingUrl, roomId, options, true);
-  wsCronos = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-  console.log(wsAyame);
-  console.log(wsCronos);
-
-  conn = checkAyameOnline().then(result => {
-    if (result) {
-      conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-      // conn = Ayame.connection(signalingUrl, roomId, options, true);
-    }
-    else {
-      // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-      conn = Ayame.connection(signalingUrl, roomId, options, true);
-    }
-    return conn;
-  });
+  if (checkAyameOnline()) {
+    conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+    // conn = Ayame.connection(signalingUrl, roomId, options, true);
+  }
+  else {
+    // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+    conn = Ayame.connection(signalingUrl, roomId, options, true);
+  }
+  // conn = checkAyameOnline().then(result => {
+  //   if (result) {
+  //     conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+  //     // conn = Ayame.connection(signalingUrl, roomId, options, true);
+  //   }
+  //   else {
+  //     // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+  //     conn = Ayame.connection(signalingUrl, roomId, options, true);
+  //   }
+  //   return conn;
+  // });
   console.log("fromIframe >> RoomId = " + roomId);
   conn.on('connect', (e) => {
     connected = true;
