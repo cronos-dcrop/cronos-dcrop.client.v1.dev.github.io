@@ -38,6 +38,11 @@ const startConn = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
+  wsAyame = new WebSocket(signalingUrl);
+  wsCronos = new WebSocket(signalingUrlCronos);
+  console.log(wsAyame);
+  console.log(wsCronos);
+
   conn = checkAyameOnline().then(result => {
     if (result) {
       conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
