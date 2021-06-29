@@ -30,7 +30,6 @@ const startConn = async () => {
   await sleep(500);
 
   conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-  await sleep(1000);
   console.log("fromIframe >> RoomId = " + roomId);
   conn.on('connect', (e) => {
     connected = true;
@@ -39,6 +38,7 @@ const startConn = async () => {
     console.log("connect Cronos-Ayame");
     // console.log("connect Ayame-Labo");
   });
+  await sleep(1000);
   if (!connected) {
     // Ayame-LaboがダメならCronos-Ayameに接続する
     conn = Ayame.connection(signalingUrl, roomId, options, true);
