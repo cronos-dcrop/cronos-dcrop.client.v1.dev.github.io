@@ -22,18 +22,18 @@ const disconnect = () => {
   }
   console.log("ページ再読込");
 }
-function checkAyameOnline () {
-  try {
-    ws = new WebSocket(signalingUrl);
-    if ( ws && ws.readyState === 1 ) {
-      return true;
-    }
-    // await fetch(signalingUrl, {mode: 'no-cors'});
-  } catch {
-    return false;
-  }
-  return false;
-};
+// const checkAyameOnline = async() => {
+//   try {
+//     ws = new WebSocket(signalingUrl);
+//     if ( ws && ws.readyState === 1 ) {
+//       return true;
+//     }
+//     // await fetch(signalingUrl, {mode: 'no-cors'});
+//   } catch {
+//     return false;
+//   }
+//   return false;
+// };
 const startConn = async () => {
   await sleep(500);
   options.video.codec = videoCodec;
@@ -41,14 +41,7 @@ const startConn = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  if (checkAyameOnline()) {
-    conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-    // conn = Ayame.connection(signalingUrl, roomId, options, true);
-  }
-  else {
-    // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-    conn = Ayame.connection(signalingUrl, roomId, options, true);
-  }
+  conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
   // conn = checkAyameOnline().then(result => {
   //   if (result) {
   //     conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
@@ -65,8 +58,18 @@ const startConn = async () => {
     connected = true;
     var restartStreamButton = document.getElementById("restartStreamButton");
     restartStreamButton.style.visibility = "hidden";
-    console.log("connect");
+    console.log("connect Ayame-Labo");
   });
+  if (!connected) {
+    // Ayame-LaboがダメならCronos-Ayameに接続する
+    conn = Ayame.connection(signalingUrl, roomId, options, true);
+    conn.on('connect', (e) => {
+      connected = true;
+      var restartStreamButton = document.getElementById("restartStreamButton");
+      restartStreamButton.style.visibility = "hidden";
+      console.log("connect Cronos-Ayame");
+    });  
+  }
   conn.on('open', async (e) => {
     //接続後に明るさ・露出・コントラストの数字を取得して表示させます
     dcropController.getExposure(roomId);
