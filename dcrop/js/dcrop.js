@@ -24,7 +24,8 @@ const disconnect = () => {
 }
 const checkAyameOnline = async () => {
   try {
-    await fetch(signalingUrl, {mode: 'no-cors'});
+    await fetch(signalingUrlCronos, {mode: 'no-cors'});
+    // await fetch(signalingUrl, {mode: 'no-cors'});
   } catch {
     return false;
   }
@@ -42,8 +43,8 @@ const startConn = async () => {
     // conn = Ayame.connection(signalingUrl, roomId, options, true);
   }
   else {
-    conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
-    // conn = Ayame.connection(signalingUrl, roomId, options, true);
+    // conn = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+    conn = Ayame.connection(signalingUrl, roomId, options, true);
   }
   console.log("fromIframe >> RoomId = " + roomId);
   conn.on('connect', (e) => {
