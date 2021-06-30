@@ -38,7 +38,7 @@ const startConn_Ayame = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  connCronos = null;
+  delete connCronos.on;
   connAyame = Ayame.connection(signalingUrl, roomId, options, true);
   connAyame.on('connect', (e) => {
     signalingServer = 'Ayame';
@@ -77,7 +77,7 @@ const startConn_cronosAyame = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  connAyame = null;
+  delete connAyame.on;
   connCronos = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
   console.log("fromIframe >> RoomId = " + roomId);
   connCronos.on('connect', (e) => {
