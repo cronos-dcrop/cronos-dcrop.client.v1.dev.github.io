@@ -138,7 +138,8 @@ window.onload = function () {
   if (!connected) {
     startConn_cronosAyame();
     if (!connected) {
-     startConn_Ayame();
+      disconnect_Cronos();
+      startConn_Ayame();
     }
   }
   //checkAndReconnect();
