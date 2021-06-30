@@ -55,7 +55,7 @@ const startConn_Ayame = async () => {
   connAyame.on('disconnect', (e) => {
     console.log(e);
     remoteVideo.srcObject = null;
-    if (connected_Ayame) {
+    if (signalingServer === 'Ayame' && connected_Ayame) {
       connected_Ayame = false;
       window.location.reload(1);
     }
@@ -94,7 +94,7 @@ const startConn_cronosAyame = async () => {
   connCronos.on('disconnect', (e) => {
     console.log(e);
     remoteVideo.srcObject = null;
-    if (connected_Cronos) {
+    if (signalingServer === 'Cronos' && connected_Cronos) {
       connected_Cronos = false;
       window.location.reload(1);
     }
