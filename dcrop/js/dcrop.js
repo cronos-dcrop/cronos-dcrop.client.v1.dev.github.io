@@ -1,5 +1,7 @@
 let isControlActive = false;
-let connected = false;
+let signalingServer = 'Cronos'
+let connected_Ayame = false;
+let connected_Cronos = false;
 let isStarted = false;
 
 const options = Ayame.defaultOptions;
@@ -38,7 +40,8 @@ const startConn_Ayame = async () => {
 
   connAyame = Ayame.connection(signalingUrl, roomId, options, true);
   connAyame.on('connect', (e) => {
-    connected = true;
+    signalingServer = 'Ayame';
+    connected_Ayame = true;
     var restartStreamButton = document.getElementById("restartStreamButton");
     restartStreamButton.style.visibility = "hidden";
     console.log("connect Ayame-Labo");
@@ -52,7 +55,8 @@ const startConn_Ayame = async () => {
   connAyame.on('disconnect', (e) => {
     console.log(e);
     remoteVideo.srcObject = null;
-    if (connected) {
+    if (connected_Ayame) {
+      connected_Ayame = false;
       window.location.reload(1);
     }
   });
@@ -75,7 +79,8 @@ const startConn_cronosAyame = async () => {
   connCronos = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
   console.log("fromIframe >> RoomId = " + roomId);
   connCronos.on('connect', (e) => {
-    connected = true;
+    signalingServer = 'Cronos';
+    connected_Cronos = true;
     var restartStreamButton = document.getElementById("restartStreamButton");
     restartStreamButton.style.visibility = "hidden";
     console.log("connect Cronos-Ayame");
@@ -89,7 +94,8 @@ const startConn_cronosAyame = async () => {
   connCronos.on('disconnect', (e) => {
     console.log(e);
     remoteVideo.srcObject = null;
-    if (connected) {
+    if (connected_Cronos) {
+      connected_Cronos = false;
       window.location.reload(1);
     }
   });
@@ -139,9 +145,9 @@ for (var i = 0; i < controls.length; i++) {
 }
 
 window.onload = function () {
-  if (!connected) {
+  if (!connected_Cronos) {
     startConn_cronosAyame();
-    if (!connected) {
+    if (!connected_Ayame) {
       // disconnect_Cronos();
       startConn_Ayame();
     }
@@ -167,7 +173,8 @@ async function doWorkAsync() {
   restartStreamButton.style.visibility = "visible";
   while (true) {
     await sleep(2000);
-    if (!connected) {
+    if ((signalingServer === 'Ayame'  && !connected_Ayame)
+    ||  (signalingServer === 'Cronos' && !connected_Cronos)) {
       console.log("retrying to connect");
       window.location.reload(1);
     }
