@@ -147,7 +147,7 @@ for (var i = 0; i < controls.length; i++) {
 window.onload = function () {
   if (signalingServer === 'Cronos' && !connected_Cronos) {
     startConn_cronosAyame();
-  } else if (signalingServer === 'Ayame'  && !connected_Ayame) {}
+  } else if (signalingServer === 'Ayame'  && !connected_Ayame) {
     startConn_Ayame();
   }
   //checkAndReconnect();
