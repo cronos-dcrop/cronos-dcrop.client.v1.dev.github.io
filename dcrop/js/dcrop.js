@@ -142,7 +142,7 @@ window.onload = function () {
   if (!connected) {
     startConn_cronosAyame();
     if (!connected) {
-      disconnect_Cronos();
+      // disconnect_Cronos();
       startConn_Ayame();
     }
   }
