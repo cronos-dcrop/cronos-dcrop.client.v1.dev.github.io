@@ -38,6 +38,7 @@ const startConn_Ayame = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
+  connCronos = null;
   connAyame = Ayame.connection(signalingUrl, roomId, options, true);
   connAyame.on('connect', (e) => {
     signalingServer = 'Ayame';
@@ -76,6 +77,7 @@ const startConn_cronosAyame = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
+  connAyame = null;
   connCronos = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
   console.log("fromIframe >> RoomId = " + roomId);
   connCronos.on('connect', (e) => {
@@ -145,11 +147,16 @@ for (var i = 0; i < controls.length; i++) {
 }
 
 window.onload = function () {
-  if (signalingServer === 'Cronos' && !connected_Cronos) {
-    startConn_cronosAyame();
-  } else if (signalingServer === 'Ayame'  && !connected_Ayame) {
+  startConn_cronosAyame();
+  if (!connected_Cronos) {
     startConn_Ayame();
   }
+
+  // if (signalingServer === 'Cronos' && !connected_Cronos) {
+  //   startConn_cronosAyame();
+  // } else if (signalingServer === 'Ayame'  && !connected_Ayame) {
+  //   startConn_Ayame();
+  // }
   //checkAndReconnect();
   //consoleLog();
   start();
@@ -174,7 +181,6 @@ async function doWorkAsync() {
     if ((signalingServer === 'Ayame'  && !connected_Ayame)
     ||  (signalingServer === 'Cronos' && !connected_Cronos)) {
       console.log("retrying to connect");
-      signalingServer = (signalingServer === 'Ayame') ? 'Cronos' : 'Ayame';
       window.location.reload(1);
     }
   }
