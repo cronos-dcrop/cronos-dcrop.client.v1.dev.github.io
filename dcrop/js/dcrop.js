@@ -174,6 +174,7 @@ async function doWorkAsync() {
     if ((signalingServer === 'Ayame'  && !connected_Ayame)
     ||  (signalingServer === 'Cronos' && !connected_Cronos)) {
       console.log("retrying to connect");
+      signalingServer = (signalingServer === 'Ayame') ? 'Cronos' : 'Ayame';
       window.location.reload(1);
     }
   }
