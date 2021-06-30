@@ -135,9 +135,11 @@ for (var i = 0; i < controls.length; i++) {
 }
 
 window.onload = function () {
-  startConn_cronosAyame();
   if (!connected) {
-    startConn_Ayame();
+    startConn_cronosAyame();
+    if (!connected) {
+     startConn_Ayame();
+    }
   }
   //checkAndReconnect();
   //consoleLog();
