@@ -52,7 +52,7 @@ const startConn_Ayame = async () => {
   connAyame.on('disconnect', (e) => {
     console.log(e);
     remoteVideo.srcObject = null;
-    window.location.reload(1);
+    // window.location.reload(1);
   });
 
   connAyame.on('addstream', (e) => {
@@ -87,7 +87,7 @@ const startConn_cronosAyame = async () => {
   connCronos.on('disconnect', (e) => {
     console.log(e);
     remoteVideo.srcObject = null;
-    window.location.reload(1);
+    // window.location.reload(1);
   });
 
   connCronos.on('addstream', (e) => {
