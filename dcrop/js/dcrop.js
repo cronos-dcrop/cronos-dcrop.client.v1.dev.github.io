@@ -145,12 +145,10 @@ for (var i = 0; i < controls.length; i++) {
 }
 
 window.onload = function () {
-  if (!connected_Cronos) {
+  if (signalingServer === 'Cronos' && !connected_Cronos) {
     startConn_cronosAyame();
-    if (!connected_Ayame) {
-      // disconnect_Cronos();
-      startConn_Ayame();
-    }
+  } else if (signalingServer === 'Ayame'  && !connected_Ayame) {}
+    startConn_Ayame();
   }
   //checkAndReconnect();
   //consoleLog();
