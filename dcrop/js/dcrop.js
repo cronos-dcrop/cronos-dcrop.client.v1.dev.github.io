@@ -57,7 +57,7 @@ const startConn_Ayame = async () => {
     remoteVideo.srcObject = null;
     if (signalingServer === 'Ayame' && connected_Ayame) {
       connected_Ayame = false;
-      // window.location.reload(1);
+      window.location.reload(1);
     }
   });
 
@@ -96,7 +96,7 @@ const startConn_cronosAyame = async () => {
     remoteVideo.srcObject = null;
     if (signalingServer === 'Cronos' && connected_Cronos) {
       connected_Cronos = false;
-      // window.location.reload(1);
+      window.location.reload(1);
     }
   });
 
@@ -145,10 +145,11 @@ for (var i = 0; i < controls.length; i++) {
 }
 
 window.onload = function () {
-  startConn_cronosAyame();
-  if (!connected_Cronos) {
-    startConn_Ayame();
-  }
+  startConn_Ayame();
+  // startConn_cronosAyame();
+  // if (!connected_Cronos) {
+  //   startConn_Ayame();
+  // }
 
   // if (signalingServer === 'Cronos' && !connected_Cronos) {
   //   startConn_cronosAyame();
@@ -176,11 +177,13 @@ async function doWorkAsync() {
   restartStreamButton.style.visibility = "visible";
   while (true) {
     await sleep(2000);
-    if ((signalingServer === 'Ayame'  && !connected_Ayame)
-    ||  (signalingServer === 'Cronos' && !connected_Cronos)) {
-      console.log("retrying to connect");
-      window.location.reload(1);
-    }
+    console.log("retrying to connect");
+    window.location.reload(1);
+    // if ((signalingServer === 'Ayame'  && !connected_Ayame)
+    // ||  (signalingServer === 'Cronos' && !connected_Cronos)) {
+    //   console.log("retrying to connect");
+    //   window.location.reload(1);
+    // }
   }
 }
 
