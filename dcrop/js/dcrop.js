@@ -177,8 +177,10 @@ async function doWorkAsync() {
   restartStreamButton.style.visibility = "visible";
   while (true) {
     await sleep(2000);
-    console.log("retrying to connect");
-    window.location.reload(1);
+    if (!connected_Ayame) {
+      console.log("retrying to connect");
+      window.location.reload(1);
+    }
     // if ((signalingServer === 'Ayame'  && !connected_Ayame)
     // ||  (signalingServer === 'Cronos' && !connected_Cronos)) {
     //   console.log("retrying to connect");
