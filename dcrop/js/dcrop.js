@@ -57,7 +57,7 @@ const startConn_Ayame = async () => {
     remoteVideo.srcObject = null;
     if (signalingServer === 'Ayame' && connected_Ayame) {
       connected_Ayame = false;
-      window.location.reload(1);
+      // window.location.reload(1);
     }
   });
 
@@ -96,7 +96,7 @@ const startConn_cronosAyame = async () => {
     remoteVideo.srcObject = null;
     if (signalingServer === 'Cronos' && connected_Cronos) {
       connected_Cronos = false;
-      window.location.reload(1);
+      // window.location.reload(1);
     }
   });
 
