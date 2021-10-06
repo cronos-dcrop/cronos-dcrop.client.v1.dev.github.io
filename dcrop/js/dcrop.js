@@ -145,8 +145,8 @@ for (var i = 0; i < controls.length; i++) {
 }
 
 window.onload = function () {
-  startConn_Ayame();
-  // startConn_cronosAyame();
+  //startConn_Ayame();
+  startConn_cronosAyame();
   // if (!connected_Cronos) {
   //   startConn_Ayame();
   // }
@@ -177,7 +177,11 @@ async function doWorkAsync() {
   restartStreamButton.style.visibility = "visible";
   while (true) {
     await sleep(2000);
-    if (!connected_Ayame) {
+    //if (!connected_Ayame) {
+    //  console.log("retrying to connect");
+    //  window.location.reload(1);
+    //}
+    if (!connected_Cronos) {
       console.log("retrying to connect");
       window.location.reload(1);
     }
