@@ -4,6 +4,14 @@ let connected_Ayame = false;
 let connected_Cronos = false;
 let isStarted = false;
 
+/* 9/24 1.サーバー切り替え処理追加 Start */
+//接続先URL保持
+let connectUrl = signalingUrl;
+
+//接続確認の終了フラグFの間、再帰で接続確認する。
+let checkState = false;
+/* 9/24 1.サーバー切り替え処理追加 End */
+
 const options = Ayame.defaultOptions;
 const cronosOptions = cronosAyame.defaultOptions;
 options.clientId = clientId ? clientId : options.clientId;
@@ -145,8 +153,9 @@ for (var i = 0; i < controls.length; i++) {
 }
 
 window.onload = function () {
+  /* 9/24 2.サーバー切り替え処理追加 Start */
   //startConn_Ayame();
-  startConn_cronosAyame();
+  // startConn_cronosAyame();
   // if (!connected_Cronos) {
   //   startConn_Ayame();
   // }
@@ -158,8 +167,70 @@ window.onload = function () {
   // }
   //checkAndReconnect();
   //consoleLog();
-  start();
+  //start();
+
+  ConnectTest();
+  /* 9/24 2.サーバー切り替え処理追加 End */
 }
+
+/* 9/24 3.サーバー切り替え処理追加 Start */
+//リロードだとconnectUrlの変更を保持できなかったので
+//再帰処理ができるように新しい関数を定義
+const ConnectTest =  async () => {
+
+  //websocket接続開始
+  document.body.innerHTML += "接続開始： " + connectUrl + "</br>";
+  sock = new WebSocket(connectUrl);
+  
+  //WebSocket による接続が開いたときに発生
+  sock.addEventListener('open',function(e){
+
+    document.body.innerHTML += "接続成功： " + connectUrl + "</br>";
+    checkState = true;
+    sock.close();        
+  });
+
+  // WebSocket による接続が閉じたときに発生
+  sock.addEventListener('close',function(e){
+
+    document.body.innerHTML += "ソケット閉じる</br>";
+
+    //
+    if(checkState){
+      if(connectUrl === signalingUrl){
+        //startConn_Ayame();
+        document.body.innerHTML += "本番接続：Ayamae</br>";
+      }else if(connectUrl === signalingUrlCronos){
+        //startConn_cronosAyame();
+        document.body.innerHTML += "本番接続：Cronos-Ayamae</br>";
+      }else{
+        document.body.innerHTML += "接続先なし!!</br>";
+      }
+    }else{
+      ConnectTest();
+    }
+    
+
+  });
+
+  //例外が発生したとき
+  sock.addEventListener('error',function(e){
+    
+    if (connectUrl === signalingUrl){
+      //Ayameに接続失敗
+      document.body.innerHTML += "接続失敗：Ayame</br>";
+      connectUrl = signalingUrlCronos;
+
+    }else{
+      //Cronos、Ayameともに接続失敗　処理終了の準備
+      document.body.innerHTML += "接続失敗：Ayame,Cronos</br>";
+      connectUrl = '';
+      checkState = true;
+    }
+  });
+}
+
+/* 9/24 3.サーバー切り替え処理追加 End */
 
 const sleep = ms => new Promise(resolve =>
   setTimeout(resolve, ms)
@@ -181,15 +252,11 @@ async function doWorkAsync() {
     //  console.log("retrying to connect");
     //  window.location.reload(1);
     //}
-    if (!connected_Cronos) {
-      console.log("retrying to connect");
-      window.location.reload(1);
+    if ((signalingServer === 'Ayame'  && !connected_Ayame)
+    ||  (signalingServer === 'Cronos' && !connected_Cronos)) {
+    	console.log("retrying to connect");
+       window.location.reload(1);
     }
-    // if ((signalingServer === 'Ayame'  && !connected_Ayame)
-    // ||  (signalingServer === 'Cronos' && !connected_Cronos)) {
-    //   console.log("retrying to connect");
-    //   window.location.reload(1);
-    // }
   }
 }
 
