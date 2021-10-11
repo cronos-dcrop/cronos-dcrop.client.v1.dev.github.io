@@ -61,8 +61,8 @@ const startConn_Ayame = async () => {
     dcropController.getContrast(roomId);
   });
   connAyame.on('disconnect', (e) => {
-    console.log(e);
-    remoteVideo.srcObject = null;
+    //remoteVideo.srcObject = null;
+    remoteVideo.pause();
     if (signalingServer === 'Ayame' && connected_Ayame) {
       connected_Ayame = false;
       window.location.reload(1);
@@ -100,8 +100,8 @@ const startConn_cronosAyame = async () => {
     dcropController.getContrast(roomId);
   });
   connCronos.on('disconnect', (e) => {
-    console.log(e);
-    remoteVideo.srcObject = null;
+    //remoteVideo.srcObject = null;
+    remoteVideo.pause();
     if (signalingServer === 'Cronos' && connected_Cronos) {
       connected_Cronos = false;
       window.location.reload(1);
@@ -154,23 +154,10 @@ for (var i = 0; i < controls.length; i++) {
 
 window.onload = function () {
   /* 9/24 2.サーバー切り替え処理追加 Start */
-  //startConn_Ayame();
-  // startConn_cronosAyame();
-  // if (!connected_Cronos) {
-  //   startConn_Ayame();
-  // }
-
-  // if (signalingServer === 'Cronos' && !connected_Cronos) {
-  //   startConn_cronosAyame();
-  // } else if (signalingServer === 'Ayame'  && !connected_Ayame) {
-  //   startConn_Ayame();
-  // }
-  //checkAndReconnect();
-  //consoleLog();
-  //start();
-
   ConnectTest();
+
   /* 9/24 2.サーバー切り替え処理追加 End */
+  start();
 }
 
 /* 9/24 3.サーバー切り替え処理追加 Start */
@@ -246,20 +233,12 @@ async function doWorkAsync() {
   restartStreamButton.style.visibility = "visible";
   while (true) {
     await sleep(2000);
-    if (!connected_Ayame) {
+    console.log("retrying check");
+    if (!connected_Ayame && !connected_Cronos) {
      console.log("retrying to connect");
      window.location.reload(1);
     }
 
-    // if (!connected_Ayame && !connected_Cronos) {
-    //  console.log("retrying to connect");
-    //  window.location.reload(1);
-    // }
-    // if ((signalingServer === 'Ayame'  && !connected_Ayame)
-    // ||  (signalingServer === 'Cronos' && !connected_Cronos)) {
-    // 	console.log("retrying to connect");
-    //    window.location.reload(1);
-    // }
   }
 }
 
