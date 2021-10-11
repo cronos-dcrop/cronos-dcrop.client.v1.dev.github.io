@@ -193,8 +193,6 @@ const ConnectTest =  async () => {
   // WebSocket による接続が閉じたときに発生
   sock.addEventListener('close',function(e){
 
-    document.body.innerHTML += "ソケット閉じる</br>";
-
     //
     if(checkState){
       if(connectUrl === signalingUrl){
