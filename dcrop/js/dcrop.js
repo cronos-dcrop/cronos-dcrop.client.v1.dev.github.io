@@ -179,13 +179,13 @@ window.onload = function () {
 const ConnectTest =  async () => {
 
   //websocket接続開始
-  document.body.innerHTML += "接続開始： " + connectUrl + "</br>";
+  console.log("接続確認開始");
   sock = new WebSocket(connectUrl);
   
   //WebSocket による接続が開いたときに発生
   sock.addEventListener('open',function(e){
 
-    document.body.innerHTML += "接続成功： " + connectUrl + "</br>";
+    console.log("接続成功");
     checkState = true;
     sock.close();        
   });
@@ -198,13 +198,13 @@ const ConnectTest =  async () => {
     //
     if(checkState){
       if(connectUrl === signalingUrl){
-        //startConn_Ayame();
-        document.body.innerHTML += "本番接続：Ayamae</br>";
+        startConn_Ayame();
+        console.log("本番接続：Ayamae");
       }else if(connectUrl === signalingUrlCronos){
-        //startConn_cronosAyame();
-        document.body.innerHTML += "本番接続：Cronos-Ayamae</br>";
+        startConn_cronosAyame();
+        console.log("本番接続：Cronos-Ayamae");
       }else{
-        document.body.innerHTML += "接続先なし!!</br>";
+        console.log("接続先なし");
       }
     }else{
       ConnectTest();
@@ -218,12 +218,12 @@ const ConnectTest =  async () => {
     
     if (connectUrl === signalingUrl){
       //Ayameに接続失敗
-      document.body.innerHTML += "接続失敗：Ayame</br>";
+      console.log("接続失敗：Ayame");
       connectUrl = signalingUrlCronos;
 
     }else{
       //Cronos、Ayameともに接続失敗　処理終了の準備
-      document.body.innerHTML += "接続失敗：Ayame,Cronos</br>";
+      console.log("接続失敗：Ayame,Cronos");
       connectUrl = '';
       checkState = true;
     }
