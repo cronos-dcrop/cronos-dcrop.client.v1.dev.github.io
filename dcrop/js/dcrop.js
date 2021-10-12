@@ -1,5 +1,5 @@
 let isControlActive = false;
-let signalingServer = 'Cronos'
+let signalingServer = 'Ayame'
 let connected_Ayame = false;
 let connected_Cronos = false;
 let isStarted = false;
@@ -180,7 +180,6 @@ const ConnectTest =  async () => {
   // WebSocket による接続が閉じたときに発生
   sock.addEventListener('close',function(e){
 
-    //
     if(checkState){
       if(connectUrl === signalingUrl){
         startConn_Ayame();
@@ -232,8 +231,7 @@ async function doWorkAsync() {
   var restartStreamButton = document.getElementById("restartStreamButton");
   restartStreamButton.style.visibility = "visible";
   while (true) {
-    await sleep(2000);
-    console.log("retrying check");
+    await sleep(30000);
     if (!connected_Ayame && !connected_Cronos) {
      console.log("retrying to connect");
      window.location.reload(1);
