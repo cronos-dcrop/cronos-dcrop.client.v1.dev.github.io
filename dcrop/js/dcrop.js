@@ -61,8 +61,7 @@ const startConn_Ayame = async () => {
     dcropController.getContrast(roomId);
   });
   connAyame.on('disconnect', (e) => {
-    //remoteVideo.srcObject = null;
-    remoteVideo.pause();
+    remoteVideo.srcObject = null;
     if (signalingServer === 'Ayame' && connected_Ayame) {
       connected_Ayame = false;
       window.location.reload(1);
@@ -100,8 +99,7 @@ const startConn_cronosAyame = async () => {
     dcropController.getContrast(roomId);
   });
   connCronos.on('disconnect', (e) => {
-    //remoteVideo.srcObject = null;
-    remoteVideo.pause();
+    remoteVideo.srcObject = null;
     if (signalingServer === 'Cronos' && connected_Cronos) {
       connected_Cronos = false;
       window.location.reload(1);
