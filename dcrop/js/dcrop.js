@@ -45,8 +45,9 @@ const startConn_Ayame = async () => {
   cronosOptions.video.codec = videoCodec;
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
-
+  
   connAyame = Ayame.connection(signalingUrl, roomId, options, true);
+  console.log("fromIframe >> RoomId = " + roomId);
   connAyame.on('connect', (e) => {
     signalingServer = 'Ayame';
     connected_Ayame = true;
@@ -61,7 +62,8 @@ const startConn_Ayame = async () => {
     dcropController.getContrast(roomId);
   });
   connAyame.on('disconnect', (e) => {
-    remoteVideo.srcObject = null;
+    //remoteVideo.srcObject = null;
+    remoteVideo.setAttribute('src',null);
     if (signalingServer === 'Ayame' && connected_Ayame) {
       connected_Ayame = false;
       window.location.reload(1);
@@ -72,7 +74,6 @@ const startConn_Ayame = async () => {
     createVideoIfNotExistent();
     remoteVideo.srcObject = e.stream;
   });
-
   connAyame.connect(null);
   await sleep(1000);
 };
@@ -99,7 +100,8 @@ const startConn_cronosAyame = async () => {
     dcropController.getContrast(roomId);
   });
   connCronos.on('disconnect', (e) => {
-    remoteVideo.srcObject = null;
+    //remoteVideo.srcObject = null;
+    remoteVideo.setAttribute('src',null);
     if (signalingServer === 'Cronos' && connected_Cronos) {
       connected_Cronos = false;
       window.location.reload(1);
@@ -110,7 +112,6 @@ const startConn_cronosAyame = async () => {
     createVideoIfNotExistent();
     remoteVideo.srcObject = e.stream;
   });
-
   connCronos.connect(null);
   await sleep(1000);
 };
@@ -178,12 +179,16 @@ const ConnectTest =  async () => {
   // WebSocket による接続が閉じたときに発生
   sock.addEventListener('close',function(e){
 
+    //確認用に呼び出す関数を入れ替えているstartConn_Ayame ⇔ startConn_cronosAyame
     if(checkState){
       if(connectUrl === signalingUrl){
-        startConn_Ayame();
+
+        //startConn_Ayame();
+        startConn_cronosAyame();
         console.log("本番接続：Ayamae");
       }else if(connectUrl === signalingUrlCronos){
-        startConn_cronosAyame();
+        //startConn_cronosAyame();
+        startConn_Ayame();
         console.log("本番接続：Cronos-Ayamae");
       }else{
         console.log("接続先なし");
@@ -231,10 +236,9 @@ async function doWorkAsync() {
   while (true) {
     await sleep(30000);
     if (!connected_Ayame && !connected_Cronos) {
-     console.log("retrying to connect");
-     window.location.reload(1);
+        console.log("retrying to connect");
+        window.location.reload(1);
     }
-
   }
 }
 
