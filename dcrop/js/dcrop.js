@@ -45,8 +45,8 @@ const startConn_Ayame = async () => {
   cronosOptions.video.codec = videoCodec;
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
-  
-  connAyame = Ayame.connection(signalingUrl, roomId, options, true);
+  /* テスト用：接続先URLを変更　signalingUrlCronos ⇒ connectUrl */
+  connAyame = Ayame.connection(connectUrl, roomId, options, true);
   console.log("fromIframe >> RoomId = " + roomId);
   connAyame.on('connect', (e) => {
     signalingServer = 'Ayame';
@@ -62,8 +62,7 @@ const startConn_Ayame = async () => {
     dcropController.getContrast(roomId);
   });
   connAyame.on('disconnect', (e) => {
-    //remoteVideo.srcObject = null;
-    remoteVideo.setAttribute('src',null);
+    remoteVideo.srcObject = null;
     if (signalingServer === 'Ayame' && connected_Ayame) {
       connected_Ayame = false;
       window.location.reload(1);
@@ -84,7 +83,8 @@ const startConn_cronosAyame = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  connCronos = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
+  /* テスト用：接続先URLを変更　signalingUrlCronos⇒connectUrl */
+  connCronos = cronosAyame.connection(connectUrl, roomId, cronosOptions, true);
   console.log("fromIframe >> RoomId = " + roomId);
   connCronos.on('connect', (e) => {
     signalingServer = 'Cronos';
@@ -100,8 +100,7 @@ const startConn_cronosAyame = async () => {
     dcropController.getContrast(roomId);
   });
   connCronos.on('disconnect', (e) => {
-    //remoteVideo.srcObject = null;
-    remoteVideo.setAttribute('src',null);
+    remoteVideo.srcObject = null;
     if (signalingServer === 'Cronos' && connected_Cronos) {
       connected_Cronos = false;
       window.location.reload(1);
@@ -164,7 +163,7 @@ window.onload = function () {
 //再帰処理ができるように新しい関数を定義
 const ConnectTest =  async () => {
 
-  //websocket接続開始
+   //websocket接続開始
   console.log("接続確認開始");
   sock = new WebSocket(connectUrl);
   
@@ -178,18 +177,21 @@ const ConnectTest =  async () => {
 
   // WebSocket による接続が閉じたときに発生
   sock.addEventListener('close',function(e){
-
-    //確認用に呼び出す関数を入れ替えているstartConn_Ayame ⇔ startConn_cronosAyame
+    
+    //テスト用：呼び出す関数を入れ替えているstartConn_Ayame ⇔ startConn_cronosAyame
     if(checkState){
       if(connectUrl === signalingUrl){
 
         //startConn_Ayame();
         startConn_cronosAyame();
-        console.log("本番接続：Ayamae");
+        console.log("本番接続：Ayame");
+        
       }else if(connectUrl === signalingUrlCronos){
+
         //startConn_cronosAyame();
         startConn_Ayame();
-        console.log("本番接続：Cronos-Ayamae");
+        console.log("本番接続：Cronos-Ayame");
+
       }else{
         console.log("接続先なし");
       }
@@ -215,6 +217,7 @@ const ConnectTest =  async () => {
       checkState = true;
     }
   });
+
 }
 
 /* 9/24 3.サーバー切り替え処理追加 End */
