@@ -45,8 +45,8 @@ const startConn_Ayame = async () => {
   cronosOptions.video.codec = videoCodec;
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
-  /* テスト用：接続先URLを変更　signalingUrlCronos ⇒ connectUrl */
-  connAyame = Ayame.connection(connectUrl, roomId, options, true);
+
+  connAyame = Ayame.connection(signalingUrl, roomId, options, true);
   console.log("fromIframe >> RoomId = " + roomId);
   connAyame.on('connect', (e) => {
     signalingServer = 'Ayame';
@@ -83,8 +83,7 @@ const startConn_cronosAyame = async () => {
   console.log(`desired videoCodec:${videoCodec}`);
   await sleep(500);
 
-  /* テスト用：接続先URLを変更　signalingUrlCronos⇒connectUrl */
-  connCronos = cronosAyame.connection(connectUrl, roomId, cronosOptions, true);
+  connCronos = cronosAyame.connection(signalingUrlCronos, roomId, cronosOptions, true);
   console.log("fromIframe >> RoomId = " + roomId);
   connCronos.on('connect', (e) => {
     signalingServer = 'Cronos';
@@ -180,17 +179,14 @@ const ConnectTest =  async () => {
     
     //テスト用：呼び出す関数を入れ替えているstartConn_Ayame ⇔ startConn_cronosAyame
     if(checkState){
-      if(connectUrl === signalingUrl){
 
-        //startConn_Ayame();
-        startConn_cronosAyame();
-        console.log("本番接続：Ayame");
+      console.log(`接続：${connectUrl}`);
+
+      if(connectUrl === signalingUrl){
+        startConn_Ayame();
         
       }else if(connectUrl === signalingUrlCronos){
-
-        //startConn_cronosAyame();
-        startConn_Ayame();
-        console.log("本番接続：Cronos-Ayame");
+        startConn_cronosAyame();
 
       }else{
         console.log("接続先なし");
@@ -198,8 +194,6 @@ const ConnectTest =  async () => {
     }else{
       ConnectTest();
     }
-    
-
   });
 
   //例外が発生したとき
