@@ -177,7 +177,6 @@ const ConnectTest =  async () => {
   // WebSocket による接続が閉じたときに発生
   sock.addEventListener('close',function(e){
     
-    //テスト用：呼び出す関数を入れ替えているstartConn_Ayame ⇔ startConn_cronosAyame
     if(checkState){
 
       console.log(`接続：${connectUrl}`);
