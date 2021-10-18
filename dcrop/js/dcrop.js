@@ -1,12 +1,18 @@
 let isControlActive = false;
-let signalingServer = 'Ayame'
+let signalingServer = 'Ayame';
 let connected_Ayame = false;
 let connected_Cronos = false;
 let isStarted = false;
 
 /* 9/24 1.サーバー切り替え処理追加 Start */
 //接続先URL保持
-let connectUrl = signalingUrl;
+let connectUrl;
+
+if (signalingServer === 'Ayame'){
+  connectUrl = signalingUrl;
+} else if (signalingServer === 'Cronos'){
+  connectUrl = signalingUrlCronos;
+}
 
 //接続確認の終了フラグFの間、再帰で接続確認する。
 let checkState = false;
@@ -163,13 +169,13 @@ window.onload = function () {
 const ConnectTest =  async () => {
 
    //websocket接続開始
-  console.log("接続確認開始");
+  console.log(`接続確認開始：${connectUrl}`);
   sock = new WebSocket(connectUrl);
   
   //WebSocket による接続が開いたときに発生
   sock.addEventListener('open',function(e){
 
-    console.log("接続成功");
+    console.log(`接続成功：${connectUrl}`);
     checkState = true;
     sock.close();        
   });
@@ -179,8 +185,6 @@ const ConnectTest =  async () => {
     
     if(checkState){
 
-      console.log(`接続：${connectUrl}`);
-
       if(connectUrl === signalingUrl){
         startConn_Ayame();
         
@@ -188,7 +192,7 @@ const ConnectTest =  async () => {
         startConn_cronosAyame();
 
       }else{
-        console.log("接続先なし");
+        /* 処理なし */ 
       }
     }else{
       ConnectTest();
@@ -198,16 +202,35 @@ const ConnectTest =  async () => {
   //例外が発生したとき
   sock.addEventListener('error',function(e){
     
-    if (connectUrl === signalingUrl){
-      //Ayameに接続失敗
-      console.log("接続失敗：Ayame");
-      connectUrl = signalingUrlCronos;
+    console.log(`接続失敗：${connectUrl}`);
 
-    }else{
+    if (signalingServer === 'Ayame'){
+      if (connectUrl === signalingUrl){
+        //Ayameに接続失敗
+        connectUrl = signalingUrlCronos;
+
+      }else if(connectUrl === signalingUrlCronos){
+        //Cronosに接続失敗
+        connectUrl = signalingUrl;
+        checkState = true;
+      }
+
+    }else if(signalingServer === 'Cronos'){
+      if (connectUrl === signalingUrl){
+        //Ayameに接続失敗
+        connectUrl = signalingUrlCronos;
+        checkState = true;
+  
+      }else if(connectUrl === signalingUrlCronos){
+        //Cronosに接続失敗
+        connectUrl = signalingUrl;
+      }
+    }
+
+    if (checkState){
       //Cronos、Ayameともに接続失敗　処理終了の準備
-      console.log("接続失敗：Ayame,Cronos");
       connectUrl = '';
-      checkState = true;
+      
     }
   });
 
