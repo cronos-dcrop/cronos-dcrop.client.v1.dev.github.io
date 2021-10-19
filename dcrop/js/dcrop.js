@@ -192,7 +192,7 @@ const ConnectTest =  async () => {
         startConn_cronosAyame();
 
       }else{
-        /* 処理なし */ 
+        console.log(`接続先なし`);
       }
     }else{
       ConnectTest();
@@ -204,27 +204,26 @@ const ConnectTest =  async () => {
     
     console.log(`接続失敗：${connectUrl}`);
 
-    if (signalingServer === 'Ayame'){
-      if (connectUrl === signalingUrl){
-        //Ayameに接続失敗
-        connectUrl = signalingUrlCronos;
+    //Ayameに失敗
+    if (connectUrl === signalingUrl){
+    
+      connectUrl = signalingUrlCronos;
 
-      }else if(connectUrl === signalingUrlCronos){
-        //Cronosに接続失敗
-        connectUrl = signalingUrl;
-        checkState = true;
+      //デフォルトの接続先がCronosの場合
+      if(signalingServer === 'Cronos'){
+          checkState = true;
       }
 
-    }else if(signalingServer === 'Cronos'){
-      if (connectUrl === signalingUrl){
-        //Ayameに接続失敗
-        connectUrl = signalingUrlCronos;
-        checkState = true;
-  
-      }else if(connectUrl === signalingUrlCronos){
-        //Cronosに接続失敗
-        connectUrl = signalingUrl;
+    //Cronosに失敗    
+    }else if(connectUrl === signalingUrlCronos){
+
+      connectUrl = signalingUrl;
+      
+      //デフォルトの接続先がAyameの場合
+      if (signalingServer === 'Ayame'){
+          checkState = true;
       }
+      
     }
 
     if (checkState){
